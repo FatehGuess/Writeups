@@ -4,13 +4,13 @@
 
 ## Solution
 
-### ..*Extracting the archive
+### 1*Extracting the archive
 The first thing to do ofcourse is to extract the archive and see what does it contain, is it password protected or not:
 
 ``` Bash
     tar xvzf layerZzz.tar.gz
 ```
-### ..*Enumerate the content of the archive
+### 2*Enumerate the content of the archive
 
 By extracting the archive we'll find a file 'message.txt' and a folder 'find_me/', the message file says the following:
 
@@ -27,7 +27,7 @@ or by using the **tree** command to view the hierarchy of the archive and find t
 
 ps: the file name is **secret-dumpfile.b64** 
 
-### ..*Decode and convert file 
+### 3*Decode and convert file 
 
 Since the file is base 64 encoded, the normal thing to do is to decod it, and happily bash has our back:
 ``` Bash
