@@ -2,7 +2,7 @@
 
 **| Can you find the hidden flag ?
 
-Connect with: ssh -p 6007 ctf@linux.ctf.microclub.net
+**Connect with: ssh -p 6007 ctf@linux.ctf.microclub.net
 Password : ctf**
 
 ## Solution 
