@@ -1,0 +1,76 @@
+# Challenge description
+
+**Making N large or small won't ensure the security of my public key, so what about using a prime number, could you find the flag in this case?!**
+
+The content of the given **RSA3.txt* file:
+
+```
+e = 65537 
+N = 109132602461540664355738283433664524924817139556555453845052513681267485975817830846363284378983283453435029358234001370622664051951864784163360449838825764343925499610325720323515558119787329874041313289284472568217265562136607762577656978460065258952844795574045112076808733355122982003782190965918601570439)
+
+the encrypted flag = 90697330186407652876302966862771194960750640700996871554346836813695509461476257893456136115459486430680141477352891935790283891678096605870155712929943437837638335071896575992153355764264844944455136253611032044644488313522094706973239301617204062678018565445526013370333146344685139545254201590214289309276 
+
+```
+
+# Solution 
+
+This challenge was among my favorite ones, since it needs a good mathematical/cryptographic background, you have to find the flaw with having N a prime number.
+For better understanding the flaw check the link : https://crypto.stackexchange.com/questions/57915/rsa-what-would-happen-if-you-chose-n-to-be-a-prime/57917
+
+Now we've fully understanded the solution let's script it ! 
+
+``` Python
+
+from sympy import symbols,Eq,solve 
+from Crypto.Util.number import getPrime, bytes_to_long, long_to_bytes
+import math
+from decimal import *
+
+def decrypt(cipher, n, d):
+    return long_to_bytes(pow(cipher, d, n))
+
+def egcd(a, b):
+    x,y, u,v = 0,1, 1,0
+    while a != 0:
+        q, r = b//a, b%a
+        m, n = x-u*q, y-v*q
+        b,a, x,y, u,v = a,r, u,v, m,n
+        gcd = b
+    return gcd, x, y
+
+def getModInverse(a, m):
+    if math.gcd(a, m) != 1:
+        return None
+    u1, u2, u3 = 1, 0, a
+    v1, v2, v3 = 0, 1, m
+
+    while v3 != 0:
+        q = u3 // v3
+        v1, v2, v3, u1, u2, u3 = (
+            u1 - q * v1), (u2 - q * v2), (u3 - q * v3), v1, v2, v3
+    return u1 % m
+
+
+
+
+
+def main():
+    e = 65537 
+    N = 109132602461540664355738283433664524924817139556555453845052513681267485975817830846363284378983283453435029358234001370622664051951864784163360449838825764343925499610325720323515558119787329874041313289284472568217265562136607762577656978460065258952844795574045112076808733355122982003782190965918601570439)
+
+    ct = 90697330186407652876302966862771194960750640700996871554346836813695509461476257893456136115459486430680141477352891935790283891678096605870155712929943437837638335071896575992153355764264844944455136253611032044644488313522094706973239301617204062678018565445526013370333146344685139545254201590214289309276 
+
+
+	  phi = int(N) - 1
+	  d = getModInverse(e,phi)
+	  print( "pt: " + str(decrypt(ct,int(N),d)))
+
+
+
+if __name__ == "__main__":
+	  main()
+
+```
+
+
+
